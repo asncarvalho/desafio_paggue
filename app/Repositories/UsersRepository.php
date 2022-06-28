@@ -5,11 +5,14 @@ namespace App\Repositories;
 use App\Models\User;
 use App\Repositories\Interfaces\IUsersRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsersRepository implements IUsersRepository
 {
     public function create(Request $request) : User
     {
+        $password = Hash::make($request->password);
+        $request['password'] = $password;
         return User::create($request->all());
     }
 

@@ -1,64 +1,96 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Desafio Paggue
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+>Status : Concluído. ✔️
 
-## About Laravel
+## Os campos do modelo principal (Usuário) são:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
++ name
++ cpf 
++ email
++ role_id
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Tecnologias Usadas
 
-## Learning Laravel
+<table>
+    <tr>
+        <td>PHP</td>
+        <td>Laravel</td>
+        <td>Composer</td>
+        <td>MySQL(MariaDB)</td>
+    </tr>
+    <tr>
+        <td>8.*</td>
+        <td>^9.11</td>
+        <td>2.0</td>
+        <td>10.8.3</td>
+    </tr>
+</table>
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Como rodar a aplicação?
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1) na linha de comando: composer install
+2) crie um banco de dados chamado 'desafio_paggue'
+3) configurar as variáveis de desenvolvimento no .env
+- Para envio de emails, configure no .env 
+    MAIL_MAILER=smtp
+    MAIL_HOST=smtp.gmail.com
+    MAIL_PORT=587
+Adicione o email e senha utilizado para enviar, se faz necessário também habilitar no gmail o uso de apps terceiros.
+4) rode o comando : php artisan migrate
+5) rode o comando : php artisan db:seed --class=RolesSeeder
+6) rode o comando : php artisan serve
+7) rode o comando : php artisan queue:work --tries 3 (abra outra instância de terminal) 
 
-## Laravel Sponsors
+Para utilizar, cadastre na rota /users um novo usuário, ele deve ter o role_id de acordo com o papel necessário para fazer transferências/saques
+As rotas ('/users', '/payments' e '/companies') tem CRUD util, podendo realizar todas as ações necessárias. 
+A rota ('/roles') só permite a criação e leitura de todos as roles disponíveis no banco
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Para fazer um pagamento, certifique-se que o usuário possui a role de Administrador. E que a conta receptora seja uma conta verificada.
+Se o .env foi configurado de forma correta, a aplicação processará o pagamento e logo envia uma notificação para o email do usuário que fez a transferência de que ela foi concluida com sucesso
 
-### Premium Partners
+Até onde eu sei, o laravel não tem um DTO(data transfer object), irei passar os DTOS em forma de JSON, utilize o insomnia ou outra aplicação HTTP Client.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+dados fictícios!
 
-## Contributing
+DTO Users
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+(/users ou /users/{id}) - POST/PATCH = 
+{
+	"name": "Teste",
+    "cpf": "8888888883",
+	"role_id": 1,
+	"email": "hello@example.com",
+	"password": "12345678"
+}
 
-## Code of Conduct
+(/users/{id}) - GET, DELETE
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+DTO Companies
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+(/companies ou /companies/{id}) - POST/PATCH = 
+{
+	"cnpj" : "35.918.296/0001-09",
+	"razao_social" : "BetoPetch Revendas LTDA",
+	"nome_fantasia" : "BetoPetch",
+	"telefone" : "888888881",
+	"email" : "betopetch2@revendas.com",
+	"value": 2000
+}
 
-## License
+(/companies/{id}) - GET, DELETE
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+DTO Payments
+
+(/payments ou /payments/{id}) - POST/PATCH = 
+{
+	"user_id": 2,
+	"company_sender_id": 1,
+	"company_reciever_id": 4,
+	"transfer_value" : 200
+}
+(/payments/{id}) - GET, DELETE
+
+
+
