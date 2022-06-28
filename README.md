@@ -33,9 +33,11 @@ Como rodar a aplicação?
 2) crie um banco de dados chamado 'desafio_paggue'
 3) configurar as variáveis de desenvolvimento no .env
 - Para envio de emails, configure no .env 
+    ```
     MAIL_MAILER=smtp
     MAIL_HOST=smtp.gmail.com
     MAIL_PORT=587
+    ```
 Adicione o email e senha utilizado para enviar, se faz necessário também habilitar no gmail o uso de apps terceiros.
 4) rode o comando : php artisan migrate
 5) rode o comando : php artisan db:seed --class=RolesSeeder
@@ -56,6 +58,7 @@ dados fictícios!
 DTO Users
 
 (/users ou /users/{id}) - POST/PATCH = 
+```
 {
 	"name": "Teste",
     "cpf": "8888888883",
@@ -63,6 +66,7 @@ DTO Users
 	"email": "hello@example.com",
 	"password": "12345678"
 }
+```
 
 (/users/{id}) - GET, DELETE
 
@@ -70,6 +74,7 @@ DTO Users
 DTO Companies
 
 (/companies ou /companies/{id}) - POST/PATCH = 
+```
 {
 	"cnpj" : "35.918.296/0001-09",
 	"razao_social" : "BetoPetch Revendas LTDA",
@@ -78,18 +83,20 @@ DTO Companies
 	"email" : "betopetch2@revendas.com",
 	"value": 2000
 }
-
+```
 (/companies/{id}) - GET, DELETE
 
 DTO Payments
 
 (/payments ou /payments/{id}) - POST/PATCH = 
+```
 {
 	"user_id": 2,
 	"company_sender_id": 1,
 	"company_reciever_id": 4,
 	"transfer_value" : 200
 }
+```
 (/payments/{id}) - GET, DELETE
 
 
